@@ -101,7 +101,7 @@ $(function (){
   var engine = (function (){
   
     var
-      states = {STARTED:1,STOPPED:0},
+      states = {STARTED:1,STOPPED:0,RESETED:3},
       mmssThread = null,
       millisecondThread = null,
       lastMinutes = ['0','0'],
@@ -144,7 +144,7 @@ $(function (){
           
           var 
             time = new Date().getTime() - lastTime,
-            seconds = (time / 1000).trunc().toString().padLeft('0',2).split(''),
+            seconds = ((time / 1000) - ((time / 60000).trunc() * 60)).trunc().toString().padLeft('0',2).split(''),
             minutes = null;
           
           if (lastSeconds[1] !== seconds[1]){
@@ -182,9 +182,9 @@ $(function (){
     return  {
       
       action: function (){
-      
-        if (state === states.STOPPED){
-        
+
+        if (state === states.STOPPED || state === states.RESETED){
+    
           state = states.STARTED;
           
           start();
@@ -199,19 +199,22 @@ $(function (){
           
           $('#action').text('Start');
         }
-        
       },
     
       reset: function (){
       
+        if (state === states.RESETED){
+          return;
+        }
+
         if (state === states.STARTED){
         
           stop();
           
-          state = states.STOPPED;
-          
           $('#action').text('Start');
         }
+        
+        state = states.RESETED;
         
         mmssThread = null;
         millisecondThread = null;
@@ -234,8 +237,6 @@ $(function (){
             clearInterval(resetThread);
           }
         },20);
-
-        
       },
     }
   })();
