@@ -131,7 +131,6 @@ $(function (){
             mm = (total / 60000).trunc().toString().padLeft('0',2),
             ss = ((total / 1000) - (mm * 60)).trunc().toString().padLeft('0',2),
             fff = (total - (ss * 1000) - (mm * 60)).toString().padLeft('0',3);
-            console.log([mm,':',ss,'.',fff].join(''));
             
             $('#timeCheckContent').val([mm,':',ss,'.',fff].join(''));
         },31);
