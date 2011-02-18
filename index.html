@@ -8,6 +8,7 @@
     <title>Time'n'Go... by Stéfano Stypulkowski @ iceon.me</title>
     <link type="text/css" rel="stylesheet" href="resources/time-n-go.css" />
     <script src="resources/jquery-1.5.min.js"></script>
+    <script src="resources/jquery.disableSelection.1.js"></script>
     <script src="resources/jquery-ui-1.8.6.custom.min.js"></script>
     <script src="resources/time-n-go.js"></script>
   </head>
@@ -37,6 +38,9 @@
           <span class="digit" style="">0</span>
         </div>
         <div style="clear:both;"></div>
+      </div>
+      <div id="timeCheck">
+        <input type="text" id="timeCheckContent" disabled="true" />
       </div>
       <div id="controls">
         <button id="action">Start</button>

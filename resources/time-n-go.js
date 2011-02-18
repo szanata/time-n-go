@@ -1,50 +1,39 @@
+/**
+* padLeft implementation
+*/
+String.prototype.padLeft = function (ch, num) {
+
+  var 
+    re = new RegExp(".{" + num + "}$"),
+    pad = "";
+    
+  do {
+    pad += ch;
+  }while(pad.length < num);
+  
+  return re.exec(pad + this)[0];
+}
+
+Number.prototype.trunc = function () {
+  return this | 0;
+}
+
 $(function (){
 
-  
-  
-  jQuery.fn.disableSelection = function() {
-
-    $(this).each(function (){
-      
-      var element = $(this)[0];
-
-      element.onselectstart = function (){
-        return false;
-      }
-
-      element.onmousedown = function (){
-        return false;
-      }
-    });
-  };
-
-
-  /**
-  * padLeft implementation
-  */
-  String.prototype.padLeft = function (ch, num) {
-  
-    var 
-      re = new RegExp(".{" + num + "}$"),
-      pad = "";
-      
-    do {
-      pad += ch;
-    }while(pad.length < num);
-    
-    return re.exec(pad + this)[0];
-  }
-  
-  Number.prototype.trunc = function () {
-    return this | 0;
-  }
+  //disable CTRL +A
+  $(window).bind('keydown keyup keypress',function (e){
+    if (e.keyCode === 65 && e.ctrlKey){
+      return false;
+    }
+  });
 
   /**
   * creates the tooltip
   */
   $('body').append('<div id="tip-wrapper"><div id="tip-arrow-border"></div><div id="tip-arrow"></div><div id="tip-body"></div></div>');
+  
   $('#tip-body').append('Thanks for using my stopwatch. Please visit my site:<a href="http://www.iceon.me" target="blank">iceon.me</a>');  
-  $('#tip-wrapper *').disableSelection();
+  
   /**
   * write the obscure screen elements
   */
@@ -54,7 +43,9 @@ $(function (){
   
   $('.digit-case').prepend('<div class="pusher"></div>');
   
-  $('#dial *').disableSelection();
+  $('#timeCheckContent').val('00:00.000');
+  
+  $('*').not('#timeCheckContent').disableSelection();
   
   /**
   * fast change a digit on screen
@@ -67,7 +58,7 @@ $(function (){
   /**
   * exchange the digit, performing animation
   */
-  function changeDigit(name,nextDigit){
+  function changeDigit(name,nextDigit,duration){
 
     $(name).find('.digit').first().text(nextDigit);
     
@@ -75,7 +66,7 @@ $(function (){
     
       $(name).find('.pusher').animate({height:200},{
       
-        duration: 300,
+        duration: duration || 250,
         complete: function (){
             
           $(this).siblings('div[data-current=true]').remove();
@@ -104,8 +95,10 @@ $(function (){
       states = {STARTED:1,STOPPED:0,RESETED:3},
       mmssThread = null,
       millisecondThread = null,
+      timeCheckThread = null,
       lastMinutes = ['0','0'],
       lastSeconds = ['0','0'],
+      lastMillis = ['0','0','0'],
       stopTime = undefined,
       lastTime = null;
       state = states.STOPPED;
@@ -115,6 +108,8 @@ $(function (){
         clearInterval(mmssThread);
         
         clearInterval(millisecondThread);
+        
+        clearInterval(timeCheckThread);
 
         stopTime = new Date().getTime();
       }
@@ -128,17 +123,41 @@ $(function (){
         }
       
         /**
+        * time check thread
+        */
+        timeCheckThread = setInterval(function (){
+          var 
+            total = (new Date().getTime() - lastTime),
+            mm = (total / 60000).trunc().toString().padLeft('0',2),
+            ss = ((total / 1000) - (mm * 60)).trunc().toString().padLeft('0',2),
+            fff = (total - (ss * 1000) - (mm * 60)).toString().padLeft('0',3);
+            console.log([mm,':',ss,'.',fff].join(''));
+            
+            $('#timeCheckContent').val([mm,':',ss,'.',fff].join(''));
+        },31);
+      
+        /**
         * performs the milliseconds progress
         */
         millisecondThread = setInterval(function (){
           
           var millis = (new Date().getTime() - lastTime).toString().padLeft('0',3).split('');
           
-          fastChange('#millisecond_1',millis[0]);
-          fastChange('#millisecond_2',millis[1]);
-          fastChange('#millisecond_3',millis[2]);
+          if (lastMillis[0] !== millis[0]){
+            fastChange('#millisecond_1',millis[0]);
+            lastMillis[0] = millis[0];
+          }
           
-        },1);
+          if (lastMillis[1] !== millis[1]){
+            fastChange('#millisecond_2',millis[1]);
+            lastMillis[1] = millis[1];
+          }
+          
+          if (lastMillis[2] !== millis[2]){
+            fastChange('#millisecond_3',millis[2]);
+            lastMillis[2] = millis[2];
+          }
+        },31);
         
         mmssThread = setInterval(function (){
           
@@ -176,7 +195,7 @@ $(function (){
               }
             }
           }
-        },50);
+        },201);
       }
       
     return  {
@@ -220,8 +239,11 @@ $(function (){
         millisecondThread = null;
         lastMinutes = ['0','0'];
         lastSeconds = ['0','0'];
+        lastMillis = ['0','0','0'];
         stopTime = undefined;
         lastTime = null;
+        
+        $('#timeCheckContent').val('00:00.000');
         
         var resetThread = setInterval(function (){
         

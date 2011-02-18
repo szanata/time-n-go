@@ -63,9 +63,26 @@ body{
   width:112px;
   float:left;
 }
-#controls{
+#timeCheck{
   margin:0px auto;
   width:900px;
+  text-align:right;
+}
+#timeCheck input{
+  background:#000;
+  border:1px solid #777;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+  font-size:14px;
+  color:#ddd;
+  margin:5px 20px 5px 20px;
+  text-align:right;
+  padding-right:10px;
+}
+#controls{
+  margin:0px auto;
+  width:900px; 
 }
 #controls button{
   background: #6D6C6C; /* old browsers */
