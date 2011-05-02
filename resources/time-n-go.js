@@ -71,15 +71,13 @@ $(function (){
             
           $(this).siblings('div[data-current=true]').remove();
           
-          $(this).siblings('.digit-wrapper').css('margin-top','0px');
+          $(this).siblings('.digit-wrapper')
+            .css('margin-top','0px')
+            .attr('data-current','true');
           
-          $(this).siblings('.digit-wrapper').attr('data-current','true');
-          
-          $(this).css('margin-top','-200px');
-          
-          $(this).html('<span class="digit"></span>');
-          
-          $(this).switchClass('pusher','digit-wrapper');
+          $(this).css('margin-top','-200px')
+            .html('<span class="digit"></span>')
+            .switchClass('pusher','digit-wrapper');
           
           $(this).parent().prepend('<div class="pusher"></div>');
           
@@ -116,6 +114,8 @@ $(function (){
       
       function start(){
       
+        document.title = '00:00.000';
+      
         if (!stopTime){
           lastTime = new Date().getTime();
         }else{
@@ -132,7 +132,9 @@ $(function (){
             ss = ((total / 1000) - (mm * 60)).trunc().toString().padLeft('0',2),
             fff = (total - (ss * 1000) - (mm * 60)).toString().padLeft('0',3);
             
-            $('#timeCheckContent').val([mm,':',ss,'.',fff].join(''));
+            var fTime = [mm,':',ss,'.',fff].join('');
+            $('#timeCheckContent').val(fTime);
+            document.title = fTime;
         },31);
       
         /**
@@ -231,6 +233,8 @@ $(function (){
           
           $('#action').text('Start');
         }
+        
+        document.title = '00:00.000';
         
         state = states.RESETED;
         
