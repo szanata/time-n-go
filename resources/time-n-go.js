@@ -32,7 +32,7 @@ $(function (){
   */
   $('body').append('<div id="tip-wrapper"><div id="tip-arrow-border"></div><div id="tip-arrow"></div><div id="tip-body"></div></div>');
   
-  $('#tip-body').append('Thanks for using my stopwatch. Please visit my site:<a href="http://www.iceon.me" target="blank">iceon.me</a>');  
+  $('#tip-body').append('Thanks for using my stopwatch. Please visit us at <a href="http://github.com/madeinstefano" target="blank">github</a>!!');  
   
   /**
   * write the obscure screen elements
@@ -43,9 +43,7 @@ $(function (){
   
   $('.digit-case').prepend('<div class="pusher"></div>');
   
-  $('#timeCheckContent').val('00:00.000');
-  
-  $('*').not('#timeCheckContent').disableSelection();
+  $('*').disableSelection();
   
   /**
   * fast change a digit on screen
@@ -93,7 +91,6 @@ $(function (){
       states = {STARTED:1,STOPPED:0,RESETED:3},
       mmssThread = null,
       millisecondThread = null,
-      timeCheckThread = null,
       lastMinutes = ['0','0'],
       lastSeconds = ['0','0'],
       lastMillis = ['0','0','0'],
@@ -106,8 +103,6 @@ $(function (){
         clearInterval(mmssThread);
         
         clearInterval(millisecondThread);
-        
-        clearInterval(timeCheckThread);
 
         stopTime = new Date().getTime();
       }
@@ -121,21 +116,6 @@ $(function (){
         }else{
           lastTime = lastTime + (new Date().getTime() - stopTime);
         }
-      
-        /**
-        * time check thread
-        */
-        timeCheckThread = setInterval(function (){
-          var 
-            total = (new Date().getTime() - lastTime),
-            mm = (total / 60000).trunc().toString().padLeft('0',2),
-            ss = ((total / 1000) - (mm * 60)).trunc().toString().padLeft('0',2),
-            fff = (total - (ss * 1000) - (mm * 60)).toString().padLeft('0',3);
-            
-            var fTime = [mm,':',ss,'.',fff].join('');
-            $('#timeCheckContent').val(fTime);
-            document.title = fTime;
-        },31);
       
         /**
         * performs the milliseconds progress
@@ -245,8 +225,6 @@ $(function (){
         lastMillis = ['0','0','0'];
         stopTime = undefined;
         lastTime = null;
-        
-        $('#timeCheckContent').val('00:00.000');
         
         var resetThread = setInterval(function (){
         
