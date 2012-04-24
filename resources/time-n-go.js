@@ -26,13 +26,6 @@ $(function (){
       return false;
     }
   });
-
-  /**
-  * creates the tooltip
-  */
-  $('body').append('<div id="tip-wrapper"><div id="tip-arrow-border"></div><div id="tip-arrow"></div><div id="tip-body"></div></div>');
-  
-  $('#tip-body').append('Thanks for using my stopwatch. Please visit us at <a href="http://github.com/madeinstefano" target="blank">github</a>!!');  
   
   /**
   * write the obscure screen elements
