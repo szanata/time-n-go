@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -6,56 +6,59 @@
     <meta name="keywords" content="chronometer, stopwatch">
     <meta name="robots" content="index,follow">
     <title>Time'n'Go</title>
+
     <link type="text/css" rel="stylesheet" href="resources/time-n-go.css" />
-    <script src="resources/jquery-1.5.1.min.js"></script>
-    <script src="resources/jquery.disableSelection.1.js"></script>
-    <script src="resources/jquery-ui-1.8.6.custom.min.js"></script>
-    <script src="resources/time-n-go.js"></script>
-    <script type="text/javascript">
 
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-19972060-2']);
-      _gaq.push(['_setDomainName', '.iceon.me']);
-      _gaq.push(['_trackPageview']);
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700" rel="stylesheet"> 
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-19972060-6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-19972060-6');
 
     </script>
   </head>
   <body>
-      <div id="dial">
-        <div class="digit-case" id="minute_1">
-          <span class="digit">0</span>
-        </div>
-        <div class="digit-case" id="minute_2">
-          <span class="digit">0</span>
-        </div>
-        <div class="spacer"></div>
-        <div class="digit-case" id="second_1">
-          <span class="digit">0</span>
-        </div>
-        <div class="digit-case" id="second_2">
-          <span class="digit">0</span>
-        </div>
-        <div class="spacer"></div>
-        <div class="digit-case" id="millisecond_1">
-          <span class="digit" style="">0</span>
-        </div>
-        <div class="digit-case" id="millisecond_2">
-          <span class="digit" style="">0</span>
-        </div>
-        <div class="digit-case" id="millisecond_3">
-          <span class="digit" style="">0</span>
-        </div>
-        <div style="clear:both;"></div>
+    <div id="dial">
+      <div class="digit-case" id="minute_1">
+        <div class="digit" data-current="true"><span>0</span></div>
       </div>
-      <div id="controls">
-        <button id="action">START</button>
-        <button id="reset">RESET</button>
+      <div class="digit-case" id="minute_2">
+          <div class="digit" data-current="true"><span>0</span></div>
       </div>
+      <div class="spacer"></div>
+      <div class="digit-case" id="second_1">
+          <div class="digit" data-current="true"><span>0</span></div>
+      </div>
+      <div class="digit-case" id="second_2">
+          <div class="digit" data-current="true"><span>0</span></div>
+      </div>
+      <div class="spacer"></div>
+      <div class="digit-case" id="millisecond_1">
+          <div class="digit" data-current="true"><span>0</span></div>
+      </div>
+      <div class="digit-case" id="millisecond_2">
+          <div class="digit" data-current="true"><span>0</span></div>
+      </div>
+      <div class="digit-case" id="millisecond_3">
+          <div class="digit" data-current="true"><span>0</span></div>
+      </div>
+    </div>
+
+    <div id="controls">
+      <button id="action">START</button>
+      <button id="reset">RESET</button>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+
+    <script src="resources/time-n-go.js"></script>
   </body>
 </html>

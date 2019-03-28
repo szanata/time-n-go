@@ -1,244 +1,124 @@
-/**
-* padLeft implementation
-*/
-String.prototype.padLeft = function (ch, num) {
+$(function () {
+  const Statuses = { STARTED:1, STOP:0, CLEAN:3 };
 
-  var 
-    re = new RegExp(".{" + num + "}$"),
-    pad = "";
-    
-  do {
-    pad += ch;
-  }while(pad.length < num);
+  const Placers = {
+    ms1: '#millisecond_1',
+    ms2: '#millisecond_2',
+    ms3: '#millisecond_3',
+    s1: '#second_1',
+    s2: '#second_2',
+    m1: '#minute_1',
+    m2: '#minute_2'
+  };
   
-  return re.exec(pad + this)[0];
-}
+  // write the hidden elemtns to perform nmumber changes
+  $('.digit-case').prepend('<div class="digit" style="margin-top:-200px;"><span></span></div>')
+    .prepend('<div class="pusher"></div>');
 
-Number.prototype.trunc = function () {
-  return this | 0;
-}
+  // UI interactions
+  
+  // change digit without animation
+  const fastChange = ( name, value ) => $(name).find( 'span' ).text( value );
+  
+  // change the digit, performing animation
+  const changeDigit = ( name, value, duration = 350 ) => {
+    const el = $( name );
+    const currentDigit = el.find( '.digit[data-current]' );
+    const nextDigit = el.find( '.digit:not([data-current])' );
+    const pusher = el.find( '.pusher' );
 
-$(function (){
+    const currentValue = currentDigit.find( 'span' ).text();
+    if ( currentValue === value ) { return; }
 
-  //disable CTRL +A
-  $(window).bind('keydown keyup keypress',function (e){
-    if (e.keyCode === 65 && e.ctrlKey){
-      return false;
+    nextDigit.find( 'span' ).text( value );
+    
+    pusher.animate( { height: 200 }, {
+      duration,
+      complete: function () {
+        currentDigit.find( 'span' ).text( value );
+        currentDigit.remove();
+        nextDigit.replaceWith( currentDigit.clone() );
+        pusher.replaceWith( nextDigit.clone() );
+        el.prepend( pusher.clone().height( 0 ) );
+      }
+    });
+  };
+
+  const updateTile = ( { m, s, ms } ) => document.title = `${m}:${s}.${ms}`;
+
+  const resetPlacers = () => setTimeout( () => Object.values( Placers ).forEach( v => changeDigit( v, 0 ) ), 20);
+
+  // Internal Stuff
+
+  const initState = () => ({
+    pauseTime: 0,
+    referenceTime: 0,
+    status: Statuses.CLEAN,
+    currentTimeStr: { m: '00', s: '00', ms: '000' },
+    timerLoop: null,
+    titleUpdateLoop: null,
+  });
+
+  const stop = state => {
+    state.status = Statuses.STOP;
+    clearInterval( state.timerLoop );
+    clearInterval( state.titleUpdateLoop );
+    updateTile( state.currentTimeStr );
+    state.pauseTime = Date.now();
+  };
+
+  const start = state => {
+    state.status = Statuses.STARTED;
+    state.referenceTime = !state.pauseTime ? Date.now() : state.referenceTime + (Date.now() - state.pauseTime);
+
+    state.titleUpdateLoop = setInterval( () => updateTile( state.currentTimeStr ) );
+  
+    state.timerLoop = setInterval( () => {
+      const time = Date.now() - state.referenceTime;
+      const millis = String(time % 1000).padStart( 3, 0);
+      const minutes = String( Math.floor( time / 1000 / 60 ) ).padStart( 2, 0 );
+      const seconds = String( Math.floor( time / 1000 ) - ( minutes * 60 ) ).padStart( 2, 0 );
+
+      state.currentTimeStr.ms = millis;
+      state.currentTimeStr.m = minutes;
+      state.currentTimeStr.s = seconds;
+
+      fastChange( Placers.ms1, millis[0] );
+      fastChange( Placers.ms2, millis[1] );
+      fastChange( Placers.ms3, millis[2] );
+      changeDigit( Placers.s1,seconds[0] );
+      changeDigit( Placers.s2,seconds[1] );
+      changeDigit( Placers.m1,minutes[1] );
+      changeDigit( Placers.m2,minutes[0] );
+    }, 31);
+  };
+
+  let currentState = initState();
+      
+  $( '#action' ).on('click', () => {
+    if ( [ Statuses.STOP, Statuses.CLEAN ].includes( currentState.status ) ) {
+      start( currentState );
+      $('#action').text('Stop');
+    } else {
+      stop( currentState );
+      $('#action').text('Start');
+    }
+  });
+
+  $( document ).on( 'keypress', e => {
+    if ( e.charCode === 32 ) { // space
+      $( '#action' ).trigger( 'click' );
     }
   });
   
-  /**
-  * write the obscure screen elements
-  */
-  $('.digit').wrap('<div class="digit-wrapper" data-current="true"></div>');
-  
-  $('.digit-case').prepend('<div class="digit-wrapper" style="margin-top:-200px;"><span class="digit"></span></div>');
-  
-  $('.digit-case').prepend('<div class="pusher"></div>');
-  
-  $('*').disableSelection();
-  
-  /**
-  * fast change a digit on screen
-  */
-  function fastChange(name,digit){
-    
-    $(name).find('.digit').text(digit);
-  }
-  
-  /**
-  * exchange the digit, performing animation
-  */
-  function changeDigit(name,nextDigit,duration){
+  $('#reset').on('click', () => {
+    if ( currentState.status === Statuses.CLEAN ){ return; }
 
-    $(name).find('.digit').first().text(nextDigit);
-    
-    if (!$(name).find(':animated').size()){
-    
-      $(name).find('.pusher').animate({height:200},{
-      
-        duration: duration || 250,
-        complete: function (){
-            
-          $(this).siblings('div[data-current=true]').remove();
-          
-          $(this).siblings('.digit-wrapper')
-            .css('margin-top','0px')
-            .attr('data-current','true');
-          
-          $(this).css('margin-top','-200px')
-            .html('<span class="digit"></span>')
-            .switchClass('pusher','digit-wrapper');
-          
-          $(this).parent().prepend('<div class="pusher"></div>');
-          
-          $(this).find('*').disableSelection();
-        }
-      });
-    }
-  }
+    stop( currentState );
+    $('#action').text('Start');
 
-  var engine = (function (){
-  
-    var
-      states = {STARTED:1,STOPPED:0,RESETED:3},
-      mmssThread = null,
-      millisecondThread = null,
-      lastMinutes = ['0','0'],
-      lastSeconds = ['0','0'],
-      lastMillis = ['0','0','0'],
-      stopTime = undefined,
-      lastTime = null;
-      state = states.STOPPED;
-
-      function stop(){
-      
-        clearInterval(mmssThread);
-        
-        clearInterval(millisecondThread);
-
-        stopTime = new Date().getTime();
-      }
-      
-      function start(){
-      
-        document.title = '00:00.000';
-      
-        if (!stopTime){
-          lastTime = new Date().getTime();
-        }else{
-          lastTime = lastTime + (new Date().getTime() - stopTime);
-        }
-      
-        /**
-        * performs the milliseconds progress
-        */
-        millisecondThread = setInterval(function (){
-          
-          var millis = (new Date().getTime() - lastTime).toString().padLeft('0',3).split('');
-          
-          if (lastMillis[0] !== millis[0]){
-            fastChange('#millisecond_1',millis[0]);
-            lastMillis[0] = millis[0];
-          }
-          
-          if (lastMillis[1] !== millis[1]){
-            fastChange('#millisecond_2',millis[1]);
-            lastMillis[1] = millis[1];
-          }
-          
-          if (lastMillis[2] !== millis[2]){
-            fastChange('#millisecond_3',millis[2]);
-            lastMillis[2] = millis[2];
-          }
-        },31);
-        
-        mmssThread = setInterval(function (){
-          
-          var 
-            time = new Date().getTime() - lastTime,
-            seconds = ((time / 1000) - ((time / 60000).trunc() * 60)).trunc().toString().padLeft('0',2).split(''),
-            minutes = null;
-          
-          if (lastSeconds[1] !== seconds[1]){
-            
-            changeDigit("#second_2",seconds[1]);
-            
-            lastSeconds[1] = seconds[1];
-            
-            if (lastSeconds[0] !== seconds[0]){
-              
-              minutes = (time / 60000).trunc().toString().padLeft('0',2).split(''),
-            
-              changeDigit("#second_1",seconds[0]);
-              
-              lastSeconds[0] = seconds[0];
-              
-              if (lastMinutes[1] !== minutes[1]){
-              
-                changeDigit("#minute_2",minutes[1]);
-                
-                lastMinutes[1] = minutes[1];
-                
-                if (lastMinutes[0] !== minutes[0]){
-                
-                  changeDigit("#minute_1",minutes[0]);
-                  
-                  lastMinutes[0] = minutes[0];
-                }
-              }
-            }
-          }
-        },201);
-      }
-      
-    return  {
-      
-      action: function (){
-
-        if (state === states.STOPPED || state === states.RESETED){
-    
-          state = states.STARTED;
-          
-          start();
-          
-          $('#action').text('Stop');
-        
-        }else{
-      
-          state = states.STOPPED;
-          
-          stop();
-          
-          $('#action').text('Start');
-        }
-      },
-    
-      reset: function (){
-      
-        if (state === states.RESETED){
-          return;
-        }
-
-        if (state === states.STARTED){
-        
-          stop();
-          
-          $('#action').text('Start');
-        }
-        
-        document.title = '00:00.000';
-        
-        state = states.RESETED;
-        
-        mmssThread = null;
-        millisecondThread = null;
-        lastMinutes = ['0','0'];
-        lastSeconds = ['0','0'];
-        lastMillis = ['0','0','0'];
-        stopTime = undefined;
-        lastTime = null;
-        
-        var resetThread = setInterval(function (){
-        
-          if (!$('#dial :animated').size()){
-          
-            changeDigit("#minute_1",0);
-            changeDigit("#minute_2",0);
-            changeDigit("#second_1",0);
-            changeDigit("#second_2",0);
-            changeDigit("#millisecond_1",0);
-            changeDigit("#millisecond_2",0);
-            changeDigit("#millisecond_3",0);
-            clearInterval(resetThread);
-          }
-        },20);
-      },
-    }
-  })();
-  
-  $('#action').bind('click',engine.action);
-  
-  $('#reset').bind('click',engine.reset);
-
+    currentState = initState();
+    resetPlacers();
+    updateTile( currentState.currentTimeStr )
+  });
 });
