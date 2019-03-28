@@ -12,13 +12,13 @@ $(function () {
   };
   
   // write the hidden elemtns to perform nmumber changes
-  $('.digit-case').prepend('<div class="digit" style="margin-top:-200px;"><span></span></div>')
+  $('.digit-wheel').prepend('<div class="digit" style="margin-top:-200px;"></div>')
     .prepend('<div class="pusher"></div>');
 
   // UI interactions
   
   // change digit without animation
-  const fastChange = ( name, value ) => $(name).find( 'span' ).text( value );
+  const fastChange = ( name, value ) => $( name ).find( '.digit[data-current]' ).text( value );
   
   // change the digit, performing animation
   const changeDigit = ( name, value, duration = 350 ) => {
@@ -27,15 +27,15 @@ $(function () {
     const nextDigit = el.find( '.digit:not([data-current])' );
     const pusher = el.find( '.pusher' );
 
-    const currentValue = currentDigit.find( 'span' ).text();
+    const currentValue = currentDigit.text();
     if ( currentValue === value ) { return; }
 
-    nextDigit.find( 'span' ).text( value );
+    nextDigit.text( value );
     
     pusher.animate( { height: 200 }, {
       duration,
       complete: function () {
-        currentDigit.find( 'span' ).text( value );
+        currentDigit.text( value );
         currentDigit.remove();
         nextDigit.replaceWith( currentDigit.clone() );
         pusher.replaceWith( nextDigit.clone() );
@@ -95,13 +95,13 @@ $(function () {
 
   let currentState = initState();
       
-  $( '#action' ).on('click', () => {
+  $( '.action' ).on( 'click', () => {
     if ( [ Statuses.STOP, Statuses.CLEAN ].includes( currentState.status ) ) {
       start( currentState );
-      $('#action').text('Stop');
+      $('#action').html( 'Stop' );
     } else {
       stop( currentState );
-      $('#action').text('Start');
+      $('#action').text( 'Start' );
     }
   });
 
@@ -111,7 +111,7 @@ $(function () {
     }
   });
   
-  $('#reset').on('click', () => {
+  $( '.reset' ).on('click', () => {
     if ( currentState.status === Statuses.CLEAN ){ return; }
 
     stop( currentState );

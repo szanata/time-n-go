@@ -6,18 +6,20 @@
 */
 * {
   outline: 0;
-  font-family: 'Muli', sans-serif;
+  font-family: 'Open sans', sans-serif;
+  box-sizing: border-box;
 }
 body{
   margin: 0;
   padding: 0;
   text-align: center;
-  background: #999;
+  background: #bbb;
 }
 #dial {
   width: 900px;
   margin: 200px auto 0px auto;
   position: relative;
+  font-size: 0;
 }
 #dial::after {
   content: '';
@@ -28,74 +30,97 @@ body{
   width: 120%;
   border-bottom: 1px solid #000;
 }
-#dial div.spacer{
+.spacer{
   height: 200px;
   width: 20px;
-  margin: 2px;
   /* float: left; */
   display: inline-block;
 }
-#dial div.digit-case {
-  width: 12%;
+.digit-case {
   border: 1px solid #222;
   border-bottom-color: #ddd;
   border-right-color: #ddd;
-  border-radius: 18px;
+  border-radius: 6px;
   height: 200px;
   display: inline-block;
-  margin: 2px;
-  background: linear-gradient(to bottom,#333 0%,#777 5%, #ccc 12%, #fff 30%,#fff 70%,#ccc 88%, #777 95%, #333 100%);
-  box-shadow: inset 2px 2px 5px 0 rgba( 0, 0, 0, .7);
   overflow: hidden;
   position: relative;
-} 
-#dial div.pusher { 
+  background-color: #333;
+}
+.digit-case::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom,rgba( 0, 0, 0, .7) 0%, rgba(0, 0, 0, .0) 25%, rgba(0,0,0,.0) 75%,rgba( 0, 0, 0, .7) 100%);
+  box-shadow: inset 0 0 5px 0 rgba( 0, 0, 0, .7);
+}
+.digit-wheel {
+  overflow: hidden;
+  display: inline-block;
+  width: 12%;
+  width: 110px;
+  vertical-align: top;
+}
+.digit-wheel:not(:last-child) { border-right: 1px solid #000; }
+.digit-wheel:not(:first-child) { border-left: 1px solid #888; }
+.pusher { 
   width: 100%;
   float: left;
 }
-#dial div.digit {
+.digit {
   width: 100%;
   height: 200px;
   vertical-align: top;
   margin-top: 0;
   float: left;
-}
-#dial .digit span {
-  color:#333;
-  margin-top: 15px;
-  font-size: 140px;
-  display: block;
+  padding-top: 8px;
+  color: #fff;
+  font-size: 130px;
   font-weight: 400;
-  text-shadow:#fff 1px 1px 0px;
+  text-shadow: -1px -1px 1px #111, 1px 1px 1px #555;
 }
-#millisecond_1 .digit span,
-#millisecond_2 .digit span,
-#millisecond_3 .digit span { font-weight: 200; }
+#millisecond_1 .digit,
+#millisecond_2 .digit,
+#millisecond_3 .digit { font-weight: 300; }
 
 #controls{
   margin: 0px auto;
   width: 900px; 
+  font-size: 0;
 }
-#controls button{
-  margin: 64px 30px;
+#controls button {
+  margin: 72px 0 0;
   background-color:#ccc;
-  border-radius: 18px;
   border: 1px solid #555;
-  border-top-color: #fff;
-  border-left-color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 2px;
   font-size: 30px;
-  font-weight: 700;
+  font-weight: 500;
   color:#333;
-  text-shadow: #fff 1px 1px 0;
   cursor: pointer;
   width: 240px;
   height: 72px;
-  box-shadow: 2px 2px 9px 0px rgba( 0, 0, 0, .7);
+}
+#controls .action {
+  box-shadow: 2px 2px 6px 0px rgba( 0, 0, 0, .5);
+  border-top-color: #ffdbaa;
+  border-left-color: #ffdbaa;
+  background-color: #ffbe5e;
+  text-shadow: 1px 1px 0  #ffdbaa;
+  border-radius: 6px 0 0 6px;
+}
+#controls .reset {
+  box-shadow: 4px 2px 4px 0px rgba( 0, 0, 0, .5);
+  border-top-color: #fff;
+  border-left-color: #fff;
+  text-shadow: 1px 1px 0  #fff;
+  border-radius: 0 6px 6px 0;
 }
 #controls button:active {
-  border: 1px solid #999;
-  color:#333;
-  box-shadow:inset 0px 0px 9px 3px #000;
+  text-shadow: 0 0 0 #fff;
+  border-top-color: #555;
+  border-left-color: #555;
+  color: #333;
+  box-shadow:inset 0px 0px 5px 1px rgba(0,0,0,.5);
 }

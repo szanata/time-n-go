@@ -8,8 +8,8 @@
     <title>Time'n'Go</title>
 
     <link type="text/css" rel="stylesheet" href="resources/time-n-go.css" />
-
-    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700" rel="stylesheet"> 
+  
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-19972060-6"></script>
@@ -24,34 +24,45 @@
   </head>
   <body>
     <div id="dial">
-      <div class="digit-case" id="minute_1">
-        <div class="digit" data-current="true"><span>0</span></div>
-      </div>
-      <div class="digit-case" id="minute_2">
+
+      <div class="digit-case">
+        <div class="digit-wheel" id="minute_1">
           <div class="digit" data-current="true"><span>0</span></div>
+        </div>
+        <div class="digit-wheel" id="minute_2">
+          <div class="digit" data-current="true"><span>0</span></div>
+        </div>
       </div>
+      
       <div class="spacer"></div>
-      <div class="digit-case" id="second_1">
+
+      <div class="digit-case">
+        <div class="digit-wheel" id="second_1">
           <div class="digit" data-current="true"><span>0</span></div>
-      </div>
-      <div class="digit-case" id="second_2">
+        </div>
+        <div class="digit-wheel" id="second_2">
           <div class="digit" data-current="true"><span>0</span></div>
+        </div>
       </div>
+
       <div class="spacer"></div>
-      <div class="digit-case" id="millisecond_1">
+    
+      <div class="digit-case">
+        <div class="digit-wheel" id="millisecond_1">
           <div class="digit" data-current="true"><span>0</span></div>
-      </div>
-      <div class="digit-case" id="millisecond_2">
+        </div>
+        <div class="digit-wheel" id="millisecond_2">
           <div class="digit" data-current="true"><span>0</span></div>
-      </div>
-      <div class="digit-case" id="millisecond_3">
+        </div>
+        <div class="digit-wheel" id="millisecond_3">
           <div class="digit" data-current="true"><span>0</span></div>
+        </div>
       </div>
     </div>
 
     <div id="controls">
-      <button id="action">START</button>
-      <button id="reset">RESET</button>
+      <button class="action">Start</button>
+      <button class="reset">Reset</button>
     </div>
 
     <script
