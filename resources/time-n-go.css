@@ -301,6 +301,11 @@ i.fa-stop::after {
   left: -3px;
   top: -3px;
 }
+.button:active {
+  border-top-color: #222;
+  border-left-color: #222;
+  box-shadow: inset 0 0 6px rgba( 0, 0, 0, .7);
+}
 
 footer {
   position: absolute;
