@@ -79,7 +79,7 @@ $(function () {
     if ( currentState.status === Statuses.CLEAN ){ return; }
 
     stop( currentState );
-    $( '.action' ).addClass( 'disabled paused' );
+    $( '.action' ).addClass( 'disabled paused' ).removeClass( 'active' );
     $( '.reset' ).addClass( 'active' );
 
     currentState = initState();
