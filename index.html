@@ -7,9 +7,11 @@
     <meta name="robots" content="index,follow">
     <title>Time'n'Go</title>
 
-    <link type="text/css" rel="stylesheet" href="resources/time-n-go.css" />
-  
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="resources/time-n-go.css" />    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300" rel="stylesheet">
+
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-19972060-6"></script>
@@ -23,44 +25,52 @@
     </script>
   </head>
   <body>
+    <h1>Time'n'Go</h1>
+
     <div id="dial">
-
-      <div class="digit-case">
-        <div class="digit-wrapper" id="m1">
-          <div class="digit-wheel ten"></div>
-        </div>
-        <div class="digit-wrapper" id="m2">
-          <div class="digit-wheel ten"></div>
-        </div>
-      </div>
-      
-      <div class="spacer"></div>
-
-      <div class="digit-case">
-        <div class="digit-wrapper" id="s1">
-          <div class="digit-wheel six"></div>
-        </div>
-        <div class="digit-wrapper" id="s2">
-          <div class="digit-wheel ten"></div>
+      <div class="digit-case-wrapper">
+        <div class="digit-case">
+          <div class="digit-wrapper" id="m1">
+            <div class="digit-wheel ten"></div>
+          </div>
+          <div class="digit-wrapper" id="m2">
+            <div class="digit-wheel ten"></div>
+          </div>
         </div>
       </div>
-
-      <div class="spacer"></div>
-    
-      <div class="digit-case">
-        <div class="digit-wrapper" id="ms1">
-          <div class="digit-wheel ten"></div>
+      <div class="digit-case-wrapper">
+        <div class="digit-case">
+          <div class="digit-wrapper" id="s1">
+            <div class="digit-wheel six"></div>
+          </div>
+          <div class="digit-wrapper" id="s2">
+            <div class="digit-wheel ten"></div>
+          </div>
         </div>
-        <div class="digit-wrapper" id="ms2">
-          <div class="digit-wheel ten"></div>
+      </div>
+      <div class="digit-case-wrapper">
+        <div class="digit-case">
+          <div class="digit-wrapper" id="ms1">
+            <div class="digit-wheel ten"></div>
+          </div>
+          <div class="digit-wrapper" id="ms2">
+            <div class="digit-wheel ten"></div>
+          </div>
         </div>
       </div>
     </div>
 
     <div id="controls">
-      <button class="action">Start</button>
-      <button class="reset">Reset</button>
+      <button class="button action paused">
+        <i class="fas fa-play"></i>
+        <i class="fas fa-pause"></i>
+      </button>
+      <button class="button reset">
+        <i class="fas fa-stop"></i>
+      </button>
     </div>
+
+    <footer><a href="https://szanata.com" target="_blank">szanata.com ● MMXIX</footer>
 
     <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -68,6 +78,7 @@
       crossorigin="anonymous"></script>
 
     <script src="resources/build_ui.js"></script>
+    <script src="resources/resize.js"></script>
     <script src="resources/time-n-go.js"></script>
   </body>
 </html>

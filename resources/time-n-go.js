@@ -57,13 +57,14 @@ $(function () {
 
   let currentState = initState();
       
-  $( '.action' ).on( 'click', () => {
+  $( '.action' ).on( 'click', e => {
+    e.preventDefault();
     if ( [ Statuses.STOP, Statuses.CLEAN ].includes( currentState.status ) ) {
       start( currentState );
-      $( '.action' ).text( 'Stop' );
+      $( '.action' ).addClass( 'active' ).removeClass( 'paused' );
     } else {
       stop( currentState );
-      $( '.action' ).text( 'Start' );
+      $( '.action' ).addClass( 'paused' ).removeClass( 'active' );
     }
   });
 
@@ -73,17 +74,20 @@ $(function () {
     }
   });
   
-  $( '.reset' ).on( 'click', async () => {
+  $( '.reset' ).on( 'click', async e => {
+    e.preventDefault();
     if ( currentState.status === Statuses.CLEAN ){ return; }
 
     stop( currentState );
-    $( '.action' ).text( 'Start' ).addClass( 'disabled' );
+    $( '.action' ).addClass( 'disabled paused' );
+    $( '.reset' ).addClass( 'active' );
 
     currentState = initState();
     
     await resetWheels();
 
     $( '.action' ).removeClass( 'disabled' );
+    $( '.reset' ).removeClass( 'active' );
 
     updateTile( currentState.currentTimeStr );
   });
