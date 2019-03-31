@@ -43,13 +43,10 @@ $(function () {
 
     state.timerLoop = setInterval( () => {
       const time = Date.now() - state.referenceTime;
-      const millis = String(time % 1000).padStart( 3, 0);
-      const minutes = String( Math.floor( time / 1000 / 60 ) ).padStart( 2, 0 );
-      const seconds = String( Math.floor( time / 1000 ) - ( minutes * 60 ) ).padStart( 2, 0 );
-
-      state.currentTimeStr.ms = millis;
-      state.currentTimeStr.m = minutes;
-      state.currentTimeStr.s = seconds;
+      const ms = String( time % 1000 ).padStart( 3, 0 );
+      const m = String( Math.floor( time / 1000 / 60 ) ).padStart( 2, 0 );
+      const s = String( Math.floor( time / 1000 ) - ( m * 60 ) ).padStart( 2, 0 );
+      state.currentTimeStr = { ms, m, s };
 
       updateTile( state.currentTimeStr )
     }, 21 );
@@ -70,13 +67,12 @@ $(function () {
 
   $( document ).on( 'keypress', e => {
     if ( e.charCode === 32 ) { // space
-      $( '#action' ).trigger( 'click' );
+      $( '.action' ).trigger( 'click' );
     }
   });
   
   $( '.reset' ).on( 'click', async e => {
     e.preventDefault();
-    if ( currentState.status === Statuses.CLEAN ){ return; }
 
     stop( currentState );
     $( '.action' ).addClass( 'disabled paused' ).removeClass( 'active' );
@@ -89,6 +85,6 @@ $(function () {
     $( '.action' ).removeClass( 'disabled' );
     $( '.reset' ).removeClass( 'active' );
 
-    updateTile( currentState.currentTimeStr );
+    document.title = 'Time\'n\'go';
   });
 });
