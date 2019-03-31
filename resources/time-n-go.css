@@ -115,6 +115,7 @@ h1 {
   width: 100%;
   position: absolute;
   transform-style: preserve-3d;
+  will-change: transform;
 }
 .digit-wheel.six {
   height: 200px;
@@ -132,8 +133,8 @@ h1 {
   animation-play-state: paused!important;
 }
 
-.digit-wheel.six.reset { transform: matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,0,-173,1)!important; }
-.digit-wheel.ten.reset { transform: matrix3d(1,0,0.00,0,0.00,1,0.00,0,0,0,1,0,0,0,-185,1)!important; }
+.digit-wheel.six.reset { transform: rotateX(0)!important; }
+.digit-wheel.ten.reset { transform: rotateX(0)!important; }
 
 @keyframes rotation-ten {
   from { transform: translateZ(-185px) rotateX(0deg); }
