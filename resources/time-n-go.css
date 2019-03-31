@@ -1,7 +1,7 @@
 /**
 *
 * time'n'go site style
-* 
+*
 * @author Stéfano Stypulkowski
 */
 * {
@@ -49,18 +49,25 @@ h1 {
   transform-origin: top left;
 }
 
-.digit-case-wrapper { display: inline-block; }
+.digit-case-wrapper {
+  display: inline-block;
+  position: relative;
+}
 .digit-case-wrapper:nth-child(-n+2) { margin-right: 20px; }
 
+.digit-wheel-house { position: relative; }
 .digit-case {
+  height: 200px;
+  position: absolute;
+  width: 100%;
   border: 2px solid #000;
   border-bottom-color: #eee;
   border-right-color: #eee;
   border-radius: 9px;
-  height: 200px;
-  position: relative;
-  background-color: #333;
-  overflow: hidden;
+  z-index: 9;
+  box-shadow: 0 0 0 12px #bbb, /* cover around */
+    0 120px 0 2px #bbb, /* cover bottom */
+    0 -120px 0 2px #bbb; /* cover top */
 }
 .digit-case::after {
   content: '';
@@ -71,6 +78,7 @@ h1 {
   height: 100%;
   background: linear-gradient(to bottom,rgba( 0, 0, 0, .8) 0%, rgba(0, 0, 0, .0) 25%, rgba(0,0,0,.0) 75%,rgba( 0, 0, 0, .8) 100%);
   box-shadow: inset 0 0 5px 0 rgba( 0, 0, 0, .7);
+  border-radius: 9px;
 }
 .digit-case::before {
   content: '';
@@ -90,7 +98,6 @@ h1 {
   vertical-align: top;
   position: relative;
   height: 200px;
-  overflow: hidden;
 }
 /* Arrows */
 .digit-wrapper::after,
@@ -99,7 +106,7 @@ h1 {
   border-top: 2px solid transparent;
   border-bottom: 2px solid transparent;
   content: '';
-  z-index: 9;
+  z-index: 5;
 }
 .digit-wrapper::before { top: 51%; }
 .digit-wrapper::after { top: 50%; }
@@ -108,15 +115,13 @@ h1 {
 .digit-wrapper:first-child::after { left: 0; border-left: 30px solid #ffbe5e; }
 .digit-wrapper:last-child::after { right: 0; border-right: 30px solid #ffbe5e; }
 
-.digit-wrapper:not(:last-child) { border-right: 1px solid #000; }
-.digit-wrapper:not(:first-child) { border-left: 1px solid #666; }
-
 .digit-wheel {
   width: 100%;
   position: absolute;
   transform-style: preserve-3d;
   will-change: transform;
 }
+
 .digit-wheel.six {
   height: 200px;
   transform: translateZ( -173px );
@@ -146,7 +151,6 @@ h1 {
   to { transform: translateZ(-173px) rotateX(-360deg); }
 }
 
-
 #m1 .digit-wheel  { animation: rotation-ten 6000s linear infinite; }
 #m2 .digit-wheel  { animation: rotation-ten 600s linear infinite; }
 #s1 .digit-wheel  { animation: rotation-six 60s linear infinite; }
@@ -156,13 +160,21 @@ h1 {
 
 /* Single digit style */
 .digit {
-  width: 100%;
+  width: inherit;
   position: absolute;
   background-color: #333;
   text-shadow: -1px -1px 1px #111, 1px 1px 1px #555;
   text-align: center;
-  box-shadow: 1px 0 0 1px #333; /* Creates an solid shadow below the digit to cover any animation flow on the wheel */
 }
+.digit-wrapper:not(:last-child) .digit {
+  box-shadow: -1px 1px 0 0 #333; /* Creates an solid shadow below the digit to cover any animation flow on the wheel */
+  border-right: 1px solid #000;
+}
+.digit-wrapper:not(:first-child) .digit {
+  box-shadow: 1px 1px 0 0 #333; /* Creates an solid shadow below the digit to cover any animation flow on the wheel */
+  border-left: 1px solid #666;
+}
+
 .digit::before,
 .digit::after {
   content: '';
@@ -173,19 +185,31 @@ h1 {
 /* lines on the wheels */
 .digit::after {
   width: 10%;
-  background: linear-gradient(to bottom, 
+  background: linear-gradient(to bottom,
     transparent 10%, #fff 10%, #fff calc( 10% + 1px), transparent calc( 10% + 1px),
     transparent 30%, #fff 30%, #fff calc( 30% + 1px), transparent calc( 30% + 1px),
     transparent 70%, #fff 70%, #fff calc( 70% + 1px), transparent calc( 70% + 1px),
     transparent 90%, #fff 90%, #fff calc( 90% + 1px), transparent calc( 90% + 1px) );
 }
+/* Hack to work on EDGE as the calc() inside another property does not work */
+_:-ms-lang(x), .digit::after {
+  background: linear-gradient(to bottom,
+    transparent 10%, #fff 10%, #fff 11%, transparent 11%,
+    transparent 30%, #fff 30%, #fff 31%, transparent 31%,
+    transparent 70%, #fff 70%, #fff 71%, transparent 71%,
+    transparent 90%, #fff 90%, #fff 91%, transparent 91% );
+}
+
 .digit::before {
   width: 15%;
-  background: linear-gradient(to bottom, transparent 50%, #fff 50%, #fff calc( 50% + 3px), transparent calc( 50% + 3px ) );
+  background: linear-gradient(to bottom, transparent 50%, #fff 50%, #fff calc( 50% + 3px ), transparent calc( 50% + 3px ) );
 }
 .six .digit::before {
-  background: linear-gradient(to bottom, transparent 51%, #fff 51%, #fff calc( 51% + 3px), transparent calc( 51% + 3px ) );
+  background: linear-gradient(to bottom, transparent 51%, #fff 51%, #fff calc( 51% + 3px ), transparent calc( 51% + 3px ) );
 }
+/* EDGE Hacks */
+_:-ms-lang(x), .digit::before { background: linear-gradient(to bottom, transparent 50%, #fff 50%, #fff 52%, transparent 52% ); }
+_:-ms-lang(x), .six .digit::before { background: linear-gradient(to bottom, transparent 51%, #fff 51%, #fff 52%, transparent 52% ); }
 
 .digit-wrapper:last-child .digit::before,
 .digit-wrapper:last-child .digit::after { left:0; }
@@ -203,7 +227,7 @@ h1 {
   font-weight: 300;
   color: #fff;
 }
- 
+
 .six .digit:nth-child(1) { transform: rotatex(  0deg) translateZ(173px); }
 .six .digit:nth-child(2) { transform: rotatex( 60deg) translateZ(173px); }
 .six .digit:nth-child(3) { transform: rotatex(120deg) translateZ(173px); }
