@@ -1,18 +1,18 @@
 $(function () {
-  const Statuses = { STARTED:1, STOP:0, CLEAN:3 };
+  const Statuses = { ON: 1, PAUSED: 0, RESET: 2 };
 
   const updateTile = ( { m, s, ms } ) => document.title = `${m}:${s}.${ms}`;
 
   const initState = () => ({
     pauseTime: 0,
     referenceTime: 0,
-    status: Statuses.CLEAN,
+    status: Statuses.RESET,
     currentTimeStr: { m: '00', s: '00', ms: '000' },
     timerLoop: null
   });
 
   const stop = state => {
-    state.status = Statuses.STOP;
+    state.status = Statuses.PAUSED;
     clearInterval( state.timerLoop );
     updateTile( state.currentTimeStr );
     state.pauseTime = Date.now();
@@ -25,23 +25,19 @@ $(function () {
       const el = $( this );
       const style = window.getComputedStyle( el.get( 0 ) );
       const matrix3d = style.getPropertyValue( 'transform' );
-
-      console.log( matrix3d )
   
-      el.css( { animation: 'none', transform: matrix3d, transition: 'transform 500ms ease-out' });
-      setTimeout( () => {
-        el.addClass( 'reset' );
-      });
+      el.css( { animation: 'none', transform: matrix3d, transition: 'transform 500ms ease-out' } );
+      setTimeout( () => el.addClass( 'reset' ) ); // make the add class async to prevent all being rendered together
     });
   
     setTimeout( () => {
       $( '.digit-wheel' ).attr( 'style', '' ).removeClass( 'reset' );
       resolve();
-    }, 550);
+    }, 550 );
   } )
 
   const start = state => {
-    state.status = Statuses.STARTED;
+    state.status = Statuses.ON;
     state.referenceTime = !state.pauseTime ? Date.now() : state.referenceTime + (Date.now() - state.pauseTime);
 
     $( '.digit-wheel' ).addClass( 'spinning' );
@@ -61,7 +57,7 @@ $(function () {
       
   $( '.action' ).on( 'click', e => {
     e.preventDefault();
-    if ( [ Statuses.STOP, Statuses.CLEAN ].includes( currentState.status ) ) {
+    if ( [ Statuses.PAUSED, Statuses.RESET ].includes( currentState.status ) ) {
       start( currentState );
       $( '.action' ).addClass( 'active' ).removeClass( 'paused' );
     } else {
