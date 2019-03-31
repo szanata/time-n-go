@@ -2,7 +2,7 @@
 *
 * time'n'go site style
 * 
-* @author St�fano Stypulkowski
+* @author Stéfano Stypulkowski
 */
 * {
   font-family: 'Montserrat', courier;
@@ -160,7 +160,7 @@ h1 {
   background-color: #333;
   text-shadow: -1px -1px 1px #111, 1px 1px 1px #555;
   text-align: center;
-  box-shadow: 1px 0 0 1px #333;
+  box-shadow: 1px 0 0 1px #333; /* Creates an solid shadow below the digit to cover any animation flow on the wheel */
 }
 .digit::before,
 .digit::after {
@@ -229,9 +229,7 @@ h1 {
   margin: 10vh auto 0;
   font-size: 0;
 }
-/* @media only screen and (min-width: 600px)  {
 
-} */
 .button {
   display: inline-block;
   background-color:#bbb;
@@ -251,13 +249,13 @@ h1 {
   text-align: center;
 }
 
-
 .action { margin-right: 48px }
 .reset { width: 120px; }
 
-.action .fa-play { margin-right: 15px; }
+.action .fa-play { margin-right: 18px; }
 i { position: relative; }
-/* glass effect */
+
+/* glare effect */
 i.fa-play::after,
 i.fa-pause::after,
 i.fa-stop::after {
