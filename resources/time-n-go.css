@@ -89,8 +89,8 @@ h1 {
   width: 120px;
   vertical-align: top;
   position: relative;
-  perspective: 1000px;
   height: 200px;
+  overflow: hidden;
 }
 /* Arrows */
 .digit-wrapper::after,
@@ -109,7 +109,7 @@ h1 {
 .digit-wrapper:last-child::after { right: 0; border-right: 30px solid #ffbe5e; }
 
 .digit-wrapper:not(:last-child) { border-right: 1px solid #000; }
-.digit-wrapper:not(:first-child) { border-left: 1px solid #888; }
+.digit-wrapper:not(:first-child) { border-left: 1px solid #666; }
 
 .digit-wheel {
   width: 100%;
