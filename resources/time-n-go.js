@@ -22,17 +22,22 @@ $(function () {
 
   const resetWheels = () => new Promise( resolve => {
     $( '.digit-wheel' ).each( function (e) {
-      const style = window.getComputedStyle( $( this ).get( 0 ) );
+      const el = $( this );
+      const style = window.getComputedStyle( el.get( 0 ) );
       const matrix3d = style.getPropertyValue( 'transform' );
+
+      console.log( matrix3d )
   
-      $( this ).css( { animation: 'none', transform: matrix3d, transition: 'transform 500ms' })
-        .addClass( 'reset' );
+      el.css( { animation: 'none', transform: matrix3d, transition: 'transform 500ms ease-out' });
+      setTimeout( () => {
+        el.addClass( 'reset' );
+      });
     });
   
     setTimeout( () => {
       $( '.digit-wheel' ).attr( 'style', '' ).removeClass( 'reset' );
       resolve();
-    }, 500);
+    }, 550);
   } )
 
   const start = state => {
