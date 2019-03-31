@@ -57,6 +57,8 @@ $(function () {
       
   $( '.action' ).on( 'click', e => {
     e.preventDefault();
+    if ( $( '.action' ).hasClass( 'disabled' ) ) { return; }
+
     if ( [ Statuses.PAUSED, Statuses.RESET ].includes( currentState.status ) ) {
       start( currentState );
       $( '.action' ).addClass( 'active' ).removeClass( 'paused' );
